@@ -1,0 +1,11 @@
+th, td, table {
+    border: 1px solid black;
+}
+
+table {
+    mso-cellspacing: 0;
+}
+
+.addButton {
+    float: left;
+}
