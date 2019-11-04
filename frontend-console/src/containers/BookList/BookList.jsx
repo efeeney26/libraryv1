@@ -1,28 +1,19 @@
 import React, {useEffect, useState, Fragment} from 'react';
-import {getBooks} from "../../api/api";
+import {connect} from 'react-redux'
+
+import { getBooksRed } from "../../data/actions";
+import Spinner from "../Spinner/Spinner";
+
 import styles from './BookList.module.css';
 
 const BookList = (props) => {
-	const {history} = props;
-	const [books, setBooks] = useState([]);
-	const [isLoading, setLoading] = useState(false);
+	const { history, getBooksRed, books, loading } = props
 	useEffect(() => {
-		setLoading(true);
-		getBooks()
-			.then((data) => {
-				setBooks(data);
-				setLoading(false);
-			})
-			.catch((err) => {
-				alert(`Something went wrong ${err.stack}`);
-				setLoading(false);
-			})
-	}, []);
-
-	if(isLoading)
-		return <div>...Waiting</div>;
+		getBooksRed()
+	}, [])
 
 	return (
+		loading ? <Spinner/> :
 		<Fragment>
 			<button onClick={() => history.push('/books/add')} className={styles.addButton}>Добавить книгу</button>
 			<br/>
@@ -58,4 +49,13 @@ const BookList = (props) => {
 	)
 };
 
-export default BookList;
+const mapStateToProps = (state) => ({
+		books: state.books,
+		loading: state.loading
+})
+
+const mapDispatchToProps = {
+	getBooksRed
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookList);

@@ -1,4 +1,6 @@
 import React, {useState, useEffect, Fragment} from 'react';
+import {connect} from 'react-redux'
+
 import {getBook, deleteBook, updateBook} from "../../api/api";
 import styles from './BookDescription.module.css'
 
@@ -26,10 +28,10 @@ const BookDescription = (props) => {
 	const handleDelete = () => {
 		deleteBook(parseId)
 			.then(() => {
-				alert('Good stuff');
+				alert('Nice!');
 				history.goBack();
 			})
-			.catch(() => alert('Zaebal!'))
+			.catch(() => alert('Error!'))
 	};
 
 	const handleChange = (e) => {
@@ -41,13 +43,13 @@ const BookDescription = (props) => {
 	};
 
 	const handleSubmit = (e) => {
-		e.preventDefault();// todo fix this
+		e.preventDefault();
 		updateBook(book, parseId)
 			.then(() => {
-				alert('good shit!');
+				alert('NICE!');
 				setEdit(false);
 			})
-			.catch(() => alert('GOVNO!'))
+			.catch(() => alert('ERROR!'))
 	};
 
 	if(isLoading)
@@ -97,4 +99,9 @@ const BookDescription = (props) => {
 	)))
 };
 
-export default BookDescription;
+const mapStateToProps = (state) => ({
+	books: state.books,
+	loading: state.loading
+})
+
+export default connect(mapStateToProps)(BookDescription);
