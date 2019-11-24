@@ -4,8 +4,8 @@ services:
     image: "postgres"
     container_name: "postgres-container"
     environment:
-      - POSTGRES_USER=
-      - POSTGRES_PASSWORD=
+      - POSTGRES_USER=efeeney
+      - POSTGRES_PASSWORD=koch2912
       - POSTGRES_DB=books
     ports:
       - "5432:5432"
