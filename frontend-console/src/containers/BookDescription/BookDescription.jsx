@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { getBook, deleteBook, updateBook } from '../../api/api';
+import api from '../../api/apiAxios';
 import styles from './BookDescription.module.css';
 
 const BookDescription = (props) => {
   const { match: { params }, history } = props;
   const parseId = parseInt(params.id, 10);
-
-
   const [book, setBook] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [isEdit, setEdit] = useState(false);
   useEffect(() => {
     setLoading(true);
-    getBook(parseId)
-      .then((data) => {
+    api.getBook(parseId)
+      .then((res) => {
+        const { data } = res
         setBook(data);
         setLoading(false);
       })
@@ -26,7 +25,7 @@ const BookDescription = (props) => {
   }, [parseId]);
 
   const handleDelete = () => {
-    deleteBook(parseId)
+    api.deleteBook(parseId)
       .then(() => {
         alert('Good stuff');
         history.goBack();
@@ -44,7 +43,7 @@ const BookDescription = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();// todo fix this
-    updateBook(book, parseId)
+    api.updateBook(book, parseId)
       .then(() => {
         alert('good shit!');
         setEdit(false);

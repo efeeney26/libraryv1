@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { getBooks } from '../../api/api';
+import api from '../../api/apiAxios';
 import styles from './BookList.module.css';
 
 const BookList = (props) => {
@@ -10,8 +10,9 @@ const BookList = (props) => {
   const [isLoading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
-    getBooks()
-      .then((data) => {
+    api.getBooks()
+      .then((res) => {
+        const { data } = res;
         setBooks(data);
         setLoading(false);
       })

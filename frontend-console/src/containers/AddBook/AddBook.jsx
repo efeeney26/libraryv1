@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { addBook } from '../../api/api';
+import api from '../../api/apiAxios';
 
 const AddBook = (props) => {
   const { history } = props;
@@ -24,7 +24,7 @@ const AddBook = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addBook(data)
+    api.addBook(data)
       .then(() => {
         alert('It is working');
         history.goBack();
