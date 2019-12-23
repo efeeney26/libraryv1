@@ -6,20 +6,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class BookService {
 
-	@Autowired
-	private BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
-	public List<Book> getBooks() {
-		return bookRepository.findAllByOrderByIdAsc();
-	}
+    @Autowired
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
-	public Book getBook(long id) {
-		return bookRepository.getOne(id);
+    public Map<String, List<Book>> getBooks() {
+        List<Book> bookList = bookRepository.findAllBooks();
+        return Collections.singletonMap("books", bookList);
+    }
+
+	public Map<String, Book> getBook(long id) {
+		Book book = bookRepository.findBook(id);
+		return Collections.singletonMap("book", book);
 	}
 
 	public void saveBook(Book book) {
@@ -27,7 +33,7 @@ public class BookService {
 	}
 
 	public void updateBook(@NotNull Book book, long id) {
-		Book updatedBook = getBook(id);
+		Book updatedBook = bookRepository.findBook(id);
 		updatedBook.setName(book.getName());
 		updatedBook.setAuthor(book.getAuthor());
 		updatedBook.setGenre(book.getGenre());

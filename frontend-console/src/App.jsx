@@ -2,17 +2,18 @@ import React from 'react';
 import {
   BrowserRouter, Route, Switch, Redirect,
 } from 'react-router-dom';
-import BookList from './containers/BookList/BookList';
-import BookDescription from './containers/BookDescription/BookDescription';
-import AddBook from './containers/AddBook/AddBook';
+import { Routes } from './routes';
+import { BookList, BookDescription, AddBook } from './containers';
+import { withSchemeHOC } from "./HOC's";
+import { bookListScheme } from './schemes';
 
 const App = () => (
   <BrowserRouter>
     <Switch>
-      <Route exact path="/books" component={BookList} />
-      <Route exact path="/books/add" component={AddBook} />
-      <Route exact path="/books/:id" component={BookDescription} />
-      <Redirect to="/books" />
+      <Route exact path={Routes.BOOKS} component={withSchemeHOC(BookList, bookListScheme)} />
+      <Route exact path={Routes.BOOK_ADD} component={AddBook} />
+      <Route exact path={Routes.BOOK} component={BookDescription} />
+      <Redirect to={Routes.BOOKS} />
     </Switch>
   </BrowserRouter>
 );

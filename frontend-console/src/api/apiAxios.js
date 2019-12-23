@@ -1,5 +1,5 @@
 import axios from 'axios';
-import axiosConf from './constants';
+import axiosConf from './axiosConfig';
 
 
 const axiosInstance = axios.create({
@@ -15,7 +15,7 @@ axiosInstance.interceptors.response.use((response) => response,
 export default {
   getBooks: () => axiosInstance.get(''),
   getBook: (id) => axiosInstance.get(`/${id}`),
-  addBook: (book) => axiosInstance.post('/add', { ...book }),
+  addBook: (book) => axiosInstance.post('/add', { book }),
   deleteBook: (id) => axiosInstance.delete(`/${id}`),
-  updateBook: (book, id) => axiosInstance.put(`/${id}`, { ...book }),
+  updateBook: (book, id) => axiosInstance.put(`/${id}`, { book }),
 };
