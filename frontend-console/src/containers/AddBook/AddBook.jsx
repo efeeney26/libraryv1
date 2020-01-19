@@ -25,11 +25,12 @@ const AddBook = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     api.addBook(data)
-      .then(() => {
-        alert('It is working');
+      .then((res) => {
+        const { data: { message } } = res;
+        alert(message);
         history.goBack();
       })
-      .catch(() => alert('SHEEEEEEIT'));
+      .catch((error) => alert(`Something goes wrong ${error.stackTrace}`));
   };
 
   return (

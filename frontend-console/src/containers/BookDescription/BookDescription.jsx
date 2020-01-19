@@ -1,36 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory, useParams } from 'react-router-dom';
 
 import api from '../../api/apiAxios';
+import useApi from '../../hooks';
 import styles from './BookDescription.module.css';
 
-const BookDescription = (props) => {
-  const { match: { params }, history } = props;
-  const parseId = parseInt(params.id, 10);
+const BookDescription = () => {
+  const history = useHistory();
+  const { id } = useParams();
+  const [initData, initLoading] = useApi.useGetBook(id);
   const [book, setBook] = useState({});
-  const [isLoading, setLoading] = useState(false);
-  const [isEdit, setEdit] = useState(false);
   useEffect(() => {
-    setLoading(true);
-    api.getBook(parseId)
-      .then((res) => {
-        const { data } = res
-        setBook(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        alert(`Something went wrong ${err.stack}`);
-        setLoading(false);
-      });
-  }, [parseId]);
+    if (initData) {
+      setBook(initData);
+    }
+  }, [initData]);
+  const [isLoading, setLoading] = useState(null);
+  useEffect(() => {
+    setLoading(initLoading);
+  }, [initLoading]);
+  const [isEdit, setEdit] = useState(false);
 
   const handleDelete = () => {
-    api.deleteBook(parseId)
-      .then(() => {
-        alert('Good stuff');
+    setLoading(true);
+    api.deleteBook(id)
+      .then((res) => {
+        const { data: { message } } = res;
+        alert(message);
         history.goBack();
       })
-      .catch(() => alert('Zaebal!'));
+      .catch((e) => alert(`Something goes wrong ${e.stackTrace}`))
+      .finally(() => setLoading(false));
   };
 
   const handleChange = (e) => {
@@ -42,13 +43,16 @@ const BookDescription = (props) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();// todo fix this
-    api.updateBook(book, parseId)
-      .then(() => {
-        alert('good shit!');
+    e.preventDefault();
+    setLoading(true);
+    api.updateBook(book, id)
+      .then((res) => {
+        const { data: { message } } = res;
+        alert(message);
         setEdit(false);
       })
-      .catch(() => alert('GOVNO!'));
+      .catch((err) => alert(`Something goes wrong ${err.stackTrace}`))
+      .finally(() => setLoading(false));
   };
 
   if (isLoading) return <div>Waiting...</div>;

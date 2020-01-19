@@ -1,26 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
-import api from '../../api/apiAxios';
+import useApi from '../../hooks';
+
 import styles from './BookList.module.css';
 
-const BookList = (props) => {
-  const { history } = props;
-  const [books, setBooks] = useState([]);
-  const [isLoading, setLoading] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    api.getBooks()
-      .then((res) => {
-        const { data } = res;
-        setBooks(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        alert(`Something went wrong ${err.stack}`);
-        setLoading(false);
-      });
-  }, []);
+const BookList = () => {
+  const history = useHistory();
+  const [books, isLoading] = useApi.useGetBooks();
 
   if (isLoading) return <div>...Waiting</div>;
 
@@ -39,9 +27,9 @@ const BookList = (props) => {
             <th>Книга</th>
           </tr>
         </thead>
-        {books.map((book) => (
-          <tbody key={book.id}>
-            <tr>
+        <tbody>
+          {books.map((book) => (
+            <tr key={book.id}>
               <td>{book.id}</td>
               <td>{book.name}</td>
               <td>{book.author}</td>
@@ -51,8 +39,8 @@ const BookList = (props) => {
                 <button type="button" onClick={() => history.push(`/books/${book.id}`)}>Открыть</button>
               </td>
             </tr>
-          </tbody>
-        ))}
+          ))}
+        </tbody>
       </table>
     </>
   );

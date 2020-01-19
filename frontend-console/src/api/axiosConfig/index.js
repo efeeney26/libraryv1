@@ -1,9 +1,9 @@
-import ROUTES from '../../routes';
+import { APIRoutes } from '../../routes';
 
 export default {
   defaultAxiosConfig: {
-    baseURL: ROUTES.BASE_URL,
-    timeout: 2000,
+    baseURL: APIRoutes.BASE_API_URL,
+    timeout: 5000,
     validateStatus: ((status) => status >= 200 && status < 300),
   },
 };
